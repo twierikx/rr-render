@@ -1,1 +1,44 @@
-<h1>Hello again</h1>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recepten Randomizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">ReceptenRandomizer</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Willekeurig Recept</a></li>
+                    <li><a href="#">Favorieten</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Vind Je Volgende Maaltijd</h2>
+            <p>Heb je honger? Laat ons je helpen om een willekeurig recept te vinden voor je volgende maaltijd!</p>
+            <button id="generate-button">Krijg een Willekeurig Recept</button>
+        </div>
+    </section>
+
+    <section class="footer">
+        <div class="container">
+            <p>&copy; 2024 ReceptenRandomizer. Alle Rechten Voorbehouden.</p>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById("generate-button").addEventListener("click", function() {
+            alert("Hier is je willekeurige recept!");
+        });
+    </script>
+</body>
+</html>
