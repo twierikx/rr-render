@@ -14,5 +14,9 @@ def add_recipe():
     recipes.append(recipe)
     return render_template('index.html', recipes=recipes)
 
+@app.route('/api')
+def api():
+    return "<h3>This is the API</h3>"
+
 if __name__ == '__main__':
     app.run(debug=True)
