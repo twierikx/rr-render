@@ -1,12 +1,12 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from pydantic import BaseModel
-from .models import Recipe
+# from .models import Recipe
 import os
 import uuid
 import datetime as dt
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/code/credentials/recipe-randomize-aac29cbf6e35.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
 
 # Application Default credentials are automatically created.
 app = firebase_admin.initialize_app()
@@ -17,6 +17,7 @@ class Database():
     def __init__(self, rec_collection_name: str = 'recipes-dev'):
         self.rec_collection_name = rec_collection_name
         self.rec_col = self.get_collection(self.rec_collection_name)
+        print('connected')
         all_recipes = self.list_recipes()
 
     def get_client(self):
@@ -61,3 +62,7 @@ class Database():
     
     def list_recipes(self):
         return [Recipe(**recipe.to_dict()) for recipe in self.rec_col.stream()]
+    
+
+
+db = Database()
