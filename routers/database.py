@@ -1,12 +1,18 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from pydantic import BaseModel
-# from .models import Recipe
+from .models import Recipe
 import os
 import uuid
 import datetime as dt
+from flask import Blueprint
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
+
+
+
+# Create a blueprint for the API routes
+database_bp = Blueprint('api', __name__)
 
 # Application Default credentials are automatically created.
 app = firebase_admin.initialize_app()
@@ -19,6 +25,7 @@ class Database():
         self.rec_col = self.get_collection(self.rec_collection_name)
         print('connected')
         all_recipes = self.list_recipes()
+        print(all_recipes)
 
     def get_client(self):
         return firestore.Client()
@@ -61,7 +68,15 @@ class Database():
         return True
     
     def list_recipes(self):
-        return [Recipe(**recipe.to_dict()) for recipe in self.rec_col.stream()]
+        # return [recipe.to_dict() for recipe in self.rec_col.stream()]
+        recipes = []
+        for recipe in self.rec_col.stream():
+            recipe_data = recipe.to_dict()
+            # Provide default values for missing fields
+            if 'added_at' not in recipe_data:
+                recipe_data['added_at'] = None
+            recipes.append(Recipe(**recipe_data).to_text())
+        return recipes
     
 
 

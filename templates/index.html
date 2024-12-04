@@ -35,6 +35,69 @@
         </div>
     </section>
 
+    <h1>Recipe List</h1>
+    <table id="recipe-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Time</th>
+                <th>Ingredients</th>
+                <th>Added At</th>
+                <th>Link</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchRecipes() {
+            try {
+                const response = await fetch('/api/all'); // Fetch data from  API
+                const data = await response.json();       // Parse JSON response
+
+                // Select the table body
+                const tableBody = document.querySelector('#recipe-table tbody');
+
+                // Clear existing rows
+                tableBody.innerHTML = '';
+
+                // Iterate through the data array and create table rows
+                data.data.forEach(item => {
+                    // Parse the string into a readable object format
+                    const recipeObj = {};
+                    item.replace(/^\['|'\]$/g, '').split("', '").forEach(entry => {
+                        const [key, value] = entry.split(': ', 2);
+                        recipeObj[key] = value || '';
+                    });
+
+                    // Create a table row
+                    const row = document.createElement('tr');
+
+                    // Add table cells for each field
+                    row.innerHTML = `
+                        <td>${recipeObj.name || ''}</td>
+                        <td>${recipeObj.time || ''} min</td>
+                        <td>${recipeObj.ingredients || ''}</td>
+                        <td>${recipeObj.added_at || 'N/A'}</td>
+                        <td>${recipeObj.link ? `<a href="${recipeObj.link}">Link</a>` : 'N/A'}</td>
+                        <td>${recipeObj.comments || ''}</td>
+                    `;
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching recipes:', error);
+            }
+        }
+
+        // Fetch recipes when the page loads
+        document.addEventListener('DOMContentLoaded', fetchRecipes);
+    </script>
+
     <script>
         document.getElementById("generate-button").addEventListener("click", function() {
             alert("Hier is je willekeurige recept!");

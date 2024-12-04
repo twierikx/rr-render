@@ -29,3 +29,8 @@ class Recipe(BaseModel):
             parts = value
         ingredients = [part.strip().capitalize() for part in parts]
         return ingredients
+    
+    def to_text(self):
+        return str(
+            [f"{k}: {v}" for k,v in self.__dict__.items()]
+        )
