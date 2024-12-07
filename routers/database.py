@@ -6,10 +6,15 @@ import os
 import uuid
 import datetime as dt
 from flask import Blueprint
+import os
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
-
-
+if os.getenv("CURRENT_ENVIRONMENT") == 'PROD':
+    print("Running on Production")
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
+else:
+    # Local testing configuration
+    print("Running locally")
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'/etc/secrets/recipe-randomize-6b9879079236.json'
 
 # Create a blueprint for the API routes
 database_bp = Blueprint('api', __name__)
@@ -77,7 +82,3 @@ class Database():
                 recipe_data['added_at'] = None
             recipes.append(Recipe(**recipe_data).to_text())
         return recipes
-    
-
-
-db = Database()
