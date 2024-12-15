@@ -34,3 +34,10 @@ class Recipe(BaseModel):
         return str(
             [f"{k}: {v}" for k,v in self.__dict__.items()]
         )
+
+class Comment(BaseModel):
+    id: Optional[uuid.UUID]  # Corrected to uuid.UUID
+    added_at: Optional[dt.datetime]
+    content: str
+    author: Optional[str]
+

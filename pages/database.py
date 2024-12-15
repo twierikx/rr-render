@@ -10,14 +10,11 @@ import os
 
 if os.getenv("CURRENT_ENVIRONMENT") == 'PROD':
     print("Running on Production")
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'/etc/secrets/recipe-randomize-6b9879079236.json'
 else:
     # Local testing configuration
     print("Running locally")
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'/etc/secrets/recipe-randomize-6b9879079236.json'
-
-# Create a blueprint for the API routes
-database_bp = Blueprint('api', __name__)
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
 
 # Application Default credentials are automatically created.
 app = firebase_admin.initialize_app()
@@ -62,6 +59,17 @@ class Database():
         doc_ref = self.rec_col.document(recipe_id)
         doc_ref.set(update_dict, merge=True)
     
+    def add_comment(self, recipe_id: uuid.UUID, comment: dict):
+        doc_ref = self.rec_col.document(recipe_id)
+        print(f'adding comment for {recipe_id}')
+        # update_dict = {
+        #     f'comments.{comment.get("id")}':comment
+        #     }
+        # print(update_dict)
+        doc_ref.update({
+        "comments": firestore.ArrayUnion([comment])
+        })
+
     def get_recipe(self, recipe_id):
         doc_ref = self.rec_col.document(recipe_id)
         doc = doc_ref.get()
@@ -80,5 +88,7 @@ class Database():
             # Provide default values for missing fields
             if 'added_at' not in recipe_data:
                 recipe_data['added_at'] = None
-            recipes.append(Recipe(**recipe_data).to_text())
+            recipes.append(Recipe(**recipe_data))
         return recipes
+    
+db_instance = Database()

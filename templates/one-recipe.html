@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1> {{ recipe.name }}</h1>
+    <p> Tijd om te maken: {{ recipe.time }} minuten</p>
+    <h2>Ingredienten</h2>
+    <ul>
+        {% for ingredient in recipe.ingredients %}
+            <li>
+                {{ ingredient }}
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Comments</h2>
+    {% for comment in recipe.comments %}
+        <p>
+            {{ comment.content}}
+            <b> {{ comment.author }}</b>
+        </p>
+        
+    {% endfor %}    
+    
+    <h1>Add a Comment:</h1>
+    <form method="POST" action="/recipe/add-comment">
+        <textarea name="content" placeholder="Write your comment here..." required></textarea><br>
+        <input type="text" name="author" placeholder="Your name (optional)">
+        <input type="hidden" name="recipe_id" value="{{ recipe.id }}"> <!-- Hidden input for recipe_id -->
+        <button type="submit">Submit</button>
+    </form>
+    
+{% endblock %}
