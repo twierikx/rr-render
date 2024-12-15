@@ -1,30 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1> {{ recipe.name }}</h1>
-    <p> Tijd om te maken: {{ recipe.time }} minuten</p>
-    <h2>Ingredienten</h2>
-    <ul>
-        {% for ingredient in recipe.ingredients %}
-            <li>
-                {{ ingredient }}
-            </li>
-        {% endfor %}
-    </ul>
-    <h2>Comments</h2>
-    {% for comment in recipe.comments %}
-        <p>
-            {{ comment.content}}
-            <b> {{ comment.author }}</b>
-        </p>
-        
-    {% endfor %}    
-    
-    <h1>Add a Comment:</h1>
-    <form method="POST" action="/recipe/add-comment">
-        <textarea name="content" placeholder="Write your comment here..." required></textarea><br>
-        <input type="text" name="author" placeholder="Your name (optional)">
-        <input type="hidden" name="recipe_id" value="{{ recipe.id }}"> <!-- Hidden input for recipe_id -->
-        <button type="submit">Submit</button>
-    </form>
-    
+    {% if mode == "edit" %}
+        <form method="POST" action="/recipe/{{ recipe.id }}/edit">
+            <h1>
+                <input type="text" name="name" value="{{ recipe.name }}" required />
+            </h1>
+            <h2>Ingredienten</h2>
+            <textarea name="ingredients" rows="10" style="width: 100%;" required>{{ recipe.ingredients | join('\n') }}</textarea>
+            <input type="text" name="url" value="{{ recipe.url}}" />
+            Duur [min.]: <input type="text" name="time" value="{{ recipe.time}}" />
+            <button type="submit">Save</button>
+        </form>
+    {% else %}
+        <h1>{{ recipe.name }}</h1>
+        <h2>Ingredienten</h2>
+        <ul>
+            {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient }}</li>
+            {% endfor %}
+        </ul>
+        <p>Tijd: {{ recipe.time }} minuten</p>
+        {% if recipe.url %}
+        <a href="{{ recipe.url }}">{{ recipe.url }}</a>
+        {% endif %}
+        <a href="/recipe/{{ recipe.id }}/edit"><button>Edit</button></a>
+    {% endif %}
 {% endblock %}

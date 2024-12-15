@@ -11,12 +11,12 @@ class Ingredient(BaseModel):
 class Recipe(BaseModel):
     id: Optional[uuid.UUID]  # Corrected to uuid.UUID
     name: str
-    time: Optional[int] 
+    time: Optional[int] = None
     ingredients: List[str] = []
     added_at: Optional[dt.datetime]  # Optional is correct here
     link: str = ''
     comments: list = []
-
+    
     @validator('time')
     def convert_time(cls, value):
         return int(value)

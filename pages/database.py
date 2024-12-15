@@ -11,10 +11,12 @@ import os
 if os.getenv("CURRENT_ENV") == 'PROD':
     print("Running on Production")
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'/etc/secrets/recipe-randomize-6b9879079236.json'
+    collection_name = 'recipes'
 else:
     # Local testing configuration
     print("Running locally")
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'secrets\recipe-randomize-6b9879079236.json'
+    collection_name = 'recipes-dev'
 
 # Application Default credentials are automatically created.
 app = firebase_admin.initialize_app()
@@ -39,12 +41,9 @@ class Database():
     def add_recipe(self, recipe_dict: dict):
         recipe_id = str(uuid.uuid4())
 
-        # Get the current time
-        current_time = dt.datetime.now()
-
         # Add the UUID and the current time to the recipe data
         recipe_dict['id'] = recipe_id
-        recipe_dict['time_added'] = current_time
+        recipe_dict['added_at'] = dt.datetime.now()
 
         # Create a document reference with the UUID
         doc_ref = self.rec_col.document(recipe_id)
@@ -91,4 +90,4 @@ class Database():
             recipes.append(Recipe(**recipe_data))
         return recipes
     
-db_instance = Database()
+db_instance = Database(rec_collection_name=collection_name)

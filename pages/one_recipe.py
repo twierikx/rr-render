@@ -4,9 +4,29 @@ from .database import db_instance
 from datetime import datetime
 import random
 import pandas as pd
-from uuid import uuid4
+import uuid
 
 one_recipe_bp = Blueprint('one_recipe', __name__)
+
+@one_recipe_bp.route('/recipe/new', methods=['GET','POST'])
+def new_recipe():
+
+    if request.method == 'POST':
+        
+        # Handle form submission to update recipe
+        new_recipe = dict(request.form)
+
+        # Split the ingredients by newlines, trimming extra spaces
+        ingredients_list = [
+            ingredient.strip() for ingredient in new_recipe['ingredients'].split('\n') if ingredient.strip()
+        ]
+        new_recipe['ingredients'] = ingredients_list
+        new_recipe['time'] = int(new_recipe['time'])
+
+        recipe = db_instance.add_recipe(new_recipe)  # Save changes to the database
+        return redirect(f'/recipe/{recipe["id"]}')  # Redirect back to the view page after saving
+
+    return render_template('new-recipe.html')
 
 @one_recipe_bp.route('/recipe/<uuid:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
@@ -24,6 +44,34 @@ def get_recipe(recipe_id):
 
     return render_template('one-recipe.html', recipe=recipe_dict)
 
+
+@one_recipe_bp.route('/recipe/<uuid:recipe_id>/edit', methods=['GET', 'POST'])
+def edit_recipe(recipe_id):
+    recipe = db_instance.get_recipe(str(recipe_id))
+
+    if not recipe:
+        return jsonify({"error": "Recipe not found"}), 404
+
+    if request.method == 'POST':
+
+        # Handle form submission to update recipe
+        updated_name = request.form.get('name')
+        updated_ingredients = request.form.get('ingredients')  # Get the multiline string
+
+        # Split the ingredients by newlines, trimming extra spaces
+        updated_ingredients_list = [
+            ingredient.strip() for ingredient in updated_ingredients.split('\n') if ingredient.strip()
+        ]
+
+        recipe['name'] = updated_name
+        recipe['ingredients'] = updated_ingredients_list
+
+        db_instance.update_fields(str(recipe_id), recipe)  # Save changes to the database
+        return redirect(f'/recipe/{recipe_id}')  # Redirect back to the view page after saving
+
+    return render_template('one-recipe.html', recipe=recipe, mode="edit")
+
+
 @one_recipe_bp.route('/recipe/add-comment', methods=['POST'])
 def add_comment():
     content = request.form.get('content')
@@ -36,7 +84,7 @@ def add_comment():
             "content": content,
             "author": author
         }
-        
+
     # Redirect back to the recipe page after processing the comment
     recipe_id = request.form.get('recipe_id')  # Ensure this is passed in the form
     if recipe_id:
