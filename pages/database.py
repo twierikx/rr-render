@@ -8,7 +8,7 @@ import datetime as dt
 from flask import Blueprint
 import os
 
-if os.getenv("CURRENT_ENVIRONMENT") == 'PROD':
+if os.getenv("CURRENT_ENV") == 'PROD':
     print("Running on Production")
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'/etc/secrets/recipe-randomize-6b9879079236.json'
 else:
