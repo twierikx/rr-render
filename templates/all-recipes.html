@@ -5,10 +5,9 @@
         <h1>All Recipes</h1>
         <div class="all-recipes-container">
             {% for recipe in recipes %}
-            <div class="card">
+            <a href="/recipe/{{ recipe.id }}" class="card">
                 <h2>{{ recipe.name }}</h2>
-                <a href="/recipe/{{ recipe.id }}">Details</a>
-            </div>
+            </a>
             {% endfor %}
         </div>
         <a href="/recipe/new" class="button">Nieuw recept</a>

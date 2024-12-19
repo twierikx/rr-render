@@ -107,6 +107,7 @@ textarea {
     transition: transform 0.2s, box-shadow 0.2s;
     width: 100%; /* Ensures the card fits the grid container */
     aspect-ratio: 1; /* Makes the card a perfect square */
+    display: block;
 }
 
 .card:hover {
