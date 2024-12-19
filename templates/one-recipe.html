@@ -13,7 +13,9 @@
         </form>
     {% else %}
         <h1>{{ recipe.name }}</h1>
+        {% if recipe.added_at %}
         <h3>Toegevoegd op {{ recipe.added_at }} </h3>
+        {% endif %}
         <h2>Ingredienten</h2>
         <ul>
             {% for ingredient in recipe.ingredients %}

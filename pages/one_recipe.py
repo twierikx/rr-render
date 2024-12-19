@@ -38,7 +38,7 @@ def get_recipe(recipe_id):
     # Convert UUIDs to strings
     recipe_dict = recipe
     recipe_dict['id'] = str(recipe_dict['id'])
-    recipe_dict['added_at'] = recipe_dict['added_at'].strftime("%d %b %Y")
+    recipe_dict['added_at'] = recipe_dict['added_at'].strftime("%d %b %Y") if 'added_at' in recipe_dict.keys() else None
     return render_template('one-recipe.html', recipe=recipe_dict)
 
 @one_recipe_bp.route('/recipe/<uuid:recipe_id>/edit', methods=['GET', 'POST'])
