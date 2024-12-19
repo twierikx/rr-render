@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from datetime import datetime
 
 from flask import Blueprint
@@ -17,6 +17,14 @@ app.register_blueprint(one_recipe_bp)
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/regalitodemargot')
+def regalito_de_margot():
+    return render_template('regalito-de-margot.html')
+
+@app.route('/regalito-de-margot')
+def regalito_de_margot2():
+    return redirect('/regalitodemargot')
 
 if __name__ == '__main__':
     app.run(debug=True)
