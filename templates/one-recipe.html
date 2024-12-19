@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
     {% if mode == "edit" %}
         <form method="POST" action="/recipe/{{ recipe.id }}/edit">
             <h1>
@@ -14,7 +15,7 @@
     {% else %}
         <h1>{{ recipe.name }}</h1>
         {% if recipe.added_at %}
-        <h3>Toegevoegd op {{ recipe.added_at }} </h3>
+        <i>Toegevoegd op {{ recipe.added_at }} </i>
         {% endif %}
         <h2>Ingredienten</h2>
         <ul>
@@ -28,4 +29,26 @@
         {% endif %}
         <a href="/recipe/{{ recipe.id }}/edit"><button>Edit</button></a>
     {% endif %}
+
+    <h1>Comments</h1>
+    {% for comment in recipe.comments %}
+        <div class="comment-card">
+            <p> <i>
+
+                {{comment.content }} 
+                <p>
+                </i>
+                <b>
+                    - {{ comment.author }}
+                </b>
+                </p>
+            </p>
+        </div>
+    {% endfor %}
+    <form method="POST" action="/recipe/add-comment">
+        <textarea name="content" placeholder="Write your comment here..." required></textarea><br>
+        <input type="text" name="author" placeholder="Your name (optional)">
+        <input type="hidden" name="recipe_id" value="{{ recipe.id }}"> <!-- Hidden input for recipe_id -->
+        <button type="submit">Submit</button>
+    </form>
 {% endblock %}

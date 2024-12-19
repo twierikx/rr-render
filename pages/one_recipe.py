@@ -75,7 +75,7 @@ def add_comment():
 
     if content:
         comment = {
-            "id": str(uuid4()),
+            "id": str(uuid.uuid4()),
             "added_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "content": content,
             "author": author
