@@ -30,7 +30,6 @@ def new_recipe():
 
 @one_recipe_bp.route('/recipe/<uuid:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
-    print('\n\n\n\nCALLED\n\n\n\n')
     recipe = db_instance.get_recipe(str(recipe_id))
 
     if not recipe:
@@ -39,11 +38,8 @@ def get_recipe(recipe_id):
     # Convert UUIDs to strings
     recipe_dict = recipe
     recipe_dict['id'] = str(recipe_dict['id'])
-
-    print(recipe_dict)
-
+    recipe_dict['added_at'] = recipe_dict['added_at'].strftime("%d %b %Y")
     return render_template('one-recipe.html', recipe=recipe_dict)
-
 
 @one_recipe_bp.route('/recipe/<uuid:recipe_id>/edit', methods=['GET', 'POST'])
 def edit_recipe(recipe_id):

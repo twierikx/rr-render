@@ -14,8 +14,6 @@ def add_recipe():
         if not recipe_dict:
             return jsonify({"error": "No data provided"}), 400
 
-        print(recipe_dict)
-
         # If the recipe has an `id`, update the existing recipe
         if 'id' in recipe_dict and recipe_dict['id']:
             updated = db.update_fields(recipe_dict['id'], recipe_dict)

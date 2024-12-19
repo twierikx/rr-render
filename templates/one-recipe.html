@@ -13,6 +13,7 @@
         </form>
     {% else %}
         <h1>{{ recipe.name }}</h1>
+        <h3>Toegevoegd op {{ recipe.added_at }} </h3>
         <h2>Ingredienten</h2>
         <ul>
             {% for ingredient in recipe.ingredients %}
@@ -21,7 +22,7 @@
         </ul>
         <p>Tijd: {{ recipe.time }} minuten</p>
         {% if recipe.url %}
-        <a href="{{ recipe.url }}">{{ recipe.url }}</a>
+        <a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a>
         {% endif %}
         <a href="/recipe/{{ recipe.id }}/edit"><button>Edit</button></a>
     {% endif %}

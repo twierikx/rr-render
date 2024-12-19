@@ -11,7 +11,6 @@ def all_recipes():
 
     recipes = db_instance.list_recipes()
     recipes_data = [recipe.dict() for recipe in recipes]  # Convert each Recipe instance to a dictionary
-    print(recipes_data)
     return render_template('all-recipes.html', recipes=recipes_data)
 
 

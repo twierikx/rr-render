@@ -27,9 +27,6 @@ class Database():
     def __init__(self, rec_collection_name: str = 'recipes-dev'):
         self.rec_collection_name = rec_collection_name
         self.rec_col = self.get_collection(self.rec_collection_name)
-        print('connected')
-        all_recipes = self.list_recipes()
-        print(all_recipes)
 
     def get_client(self):
         return firestore.Client()
@@ -60,11 +57,6 @@ class Database():
     
     def add_comment(self, recipe_id: uuid.UUID, comment: dict):
         doc_ref = self.rec_col.document(recipe_id)
-        print(f'adding comment for {recipe_id}')
-        # update_dict = {
-        #     f'comments.{comment.get("id")}':comment
-        #     }
-        # print(update_dict)
         doc_ref.update({
         "comments": firestore.ArrayUnion([comment])
         })
